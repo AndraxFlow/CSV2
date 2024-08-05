@@ -1,9 +1,16 @@
+/*
 package TicTocToe;
 //игрок ставит х
 // бот ставит о
 // бот выбирает случайную пустую клетку
 // без ооп
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -20,7 +27,6 @@ public class TicTocToe {
     private final static String GAME_STATE_DRAW = "ничья!!!!";
     private final static String GAME_STATE_NOT_OVER = "Игра не закончена";
 
-
     private static Scanner scanner = new Scanner(System.in);
     private static Random random = new Random();
     public static void main(String[] args) {
@@ -29,15 +35,33 @@ public class TicTocToe {
         //}
     }
 
-    public static void startGameRound(){
-        System.out.println("Начало нового раунда");
+    public static void startGameRound() {
+
         // create board
         String[][] board = createBoard();
         // start game cycle
         startGameLoop(board);
+
     }
 
+
     public static String[][] createBoard() {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JFrame.setDefaultLookAndFeelDecorated(true);
+                createGUI gui = new createGUI();
+                JFrame frame = new JFrame("TicTacToe");
+                frame.add(gui.getGui());
+                frame.setLocationByPlatform(true);
+                frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+                frame.setPreferredSize(new Dimension(500,500));
+                frame.setMinimumSize(new Dimension(500,500));
+                frame.setLocation(50,50);
+                frame.pack();
+                frame.setVisible(true);
+
+            }
+        });
         String[][] board = new String[ROW_COUNT][COL_COUNT];
         for (int row = 0; row < ROW_COUNT; row++) {
             for (int col = 0; col < COL_COUNT; col++) {
@@ -47,14 +71,12 @@ public class TicTocToe {
         return board;
     }
 
-
-
     public static void startGameLoop(String[][] board) {
         // while (gameNotOver)
         do {
             //playerTurn
             makePlayerTurn(board);
-            printBoard(board);
+            updateBoard(board);
 
             final String ANSI_CLS = "\u001b[2J";
             final String ANSI_HOME = "\u001b[H";
@@ -73,7 +95,7 @@ public class TicTocToe {
 
 
             makeBotTurn(board);
-            printBoard(board);
+            updateBoard(board);
             gameState = checkGameState(board);
             if (!Objects.equals(gameState, GAME_STATE_NOT_OVER)){
                 System.out.println(gameState);
@@ -197,7 +219,7 @@ public class TicTocToe {
         return true;
     }
 
-    public static void printBoard(String[][] board) {
+    public static void updateBoard(String[][] board) {
         System.out.println("-----------");
         for (int row = 0; row < ROW_COUNT; row++) {
             String line = "|";
@@ -212,6 +234,75 @@ public class TicTocToe {
 
     }
 }
+class createGUI extends JFrame {
+    private  JPanel board = new JPanel(new BorderLayout(3, 3));
+    private JButton[][] buttons = new JButton[3][3];
+    public int[][] cells = { {0,0,0}, {0,0,0}, {0,0,0} };
+    private JPanel c1Board, c2Board;
+    static int turn = 0;
+    private  JLabel messagec1 = new JLabel("Board");
+    Font BigFontTR = new Font("TimesRoman", Font.BOLD, 30);//Тут все про шрифт)
+    JToolBar tool = new JToolBar();
+    Insets Margin = new Insets(0,0,0,0);
+    int squares = 3;
+    int space = 30;
+    createGUI() {
+        initialize();
+    }
+
+    public void initialize(){
+        board.setBorder(new EmptyBorder(5, 5, 5, 5));
+        board.add(tool, BorderLayout.PAGE_START);
+        setTitle("TicTacToe");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(500, 300);
+        setResizable(true);
+        tool.add(messagec1);
+        c1Board = new JPanel(new GridLayout(0, 3));
+        c1Board.setBorder(new LineBorder(Color.BLACK));
+        board.add(c1Board);
+
+        for (int i = 0; i < buttons.length; i++) {
+            for (int j = 0; j < buttons[i].length; j++) {
+                JButton b = new JButton();
+                b.setMargin(Margin);
+                b.setBackground(Color.WHITE);
+
+                b.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(turn % 2 == 0) {
+                            b.setFont(BigFontTR);
+                            b.setText("X");
+                            b.setBorder(BorderFactory.createTitledBorder("Player 1"));
+                            turn += 1;
+                        }else{
+                            b.setFont(BigFontTR);
+                            b.setText("O");
+                            b.setBorder(BorderFactory.createTitledBorder("Player 2"));
+                            turn += 1;
+                        }
+                    }
+                });
+                buttons[j][i] = b;
+            }
+        }
+        for (int i = 0; i < squares; i++) {
+            for (int j = 0; j < squares; j++) {
+                c1Board.add(buttons[j][i]);
+            }
+        }
 
 
 
+
+    }
+
+    public final JComponent getGui() {
+        return board;
+    }
+}
+
+
+
+*/
