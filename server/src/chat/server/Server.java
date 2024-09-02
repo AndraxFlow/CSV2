@@ -42,9 +42,7 @@ public class Server  implements TCPConnectionListener {
             }
         } catch (Exception e) {
             sendToAllConnections("Client has tried to connect but session is full");
-            onDisconnect(tcpConnection);
             tcpConnection.disconnect();
-
         }
     }
 

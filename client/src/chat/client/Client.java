@@ -16,22 +16,21 @@ public class Client extends JFrame implements ActionListener, TCPConnectionListe
     private static final int WiDTH = 600;
     private static final int HEIGHT = 400;
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() { /*swing позволяет требует чтобы можно было работать только из потока EDT
-        , благодаря этой строчке можно это реализовать*/
-            @Override
-            public void run() {
-                new Client();
-            }
-        });
-    }
-
     private final JTextArea log = new JTextArea();
     private final JTextField fieldName = new JTextField("John_Doe");
     private final JTextField fieldMessage = new JTextField();
     //JButton button = new JButton("Click Me");
     private TCPConnection connection;
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() { /*swing требует чтобы можно было работать только из потока EDT,
+         благодаря этой строчке можно это реализовать*/
+            @Override
+            public void run() {
+                new Client();
+            }
+        });
+    }
 
     private Client() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

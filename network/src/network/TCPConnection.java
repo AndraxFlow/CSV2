@@ -12,6 +12,7 @@ public class TCPConnection {
     private final BufferedReader in;
     private final BufferedWriter out;
 
+
     public TCPConnection(TCPConnectionListener eventListener, String ipAddr, int port) throws IOException{
         this(eventListener, new Socket(ipAddr, port));
 
@@ -28,7 +29,10 @@ public class TCPConnection {
                 try {
                     eventListener.onConnectionReady(TCPConnection.this);
                     while (!rxThread.isInterrupted()){
-                        String msg = in.readLine();
+                        String msg;
+                        if ((msg = in.readLine()) == null) {
+                            break;
+                        }
                         eventListener.onReceiveString(TCPConnection.this,msg);
                     }
                 } catch (IOException e){
